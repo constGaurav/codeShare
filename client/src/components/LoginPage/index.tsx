@@ -28,16 +28,16 @@ const LoginPage = () => {
         <form onSubmit={handleJoinRoom} className={styles['loginForm']}>
           <h1 className={styles['loginHeading']}>Join Room</h1>
           <input
-            type="text"
-            placeholder="Username"
+            type='text'
+            placeholder='Username'
             value={loginDetails.username}
             onChange={(e) =>
               setLoginDetails({ ...loginDetails, username: e.target.value })
             }
           />
           <input
-            type="password"
-            placeholder="Room ID"
+            type='password'
+            placeholder='Room ID'
             value={loginDetails.roomID}
             onChange={(e) => {
               setLoginDetails({
@@ -46,7 +46,7 @@ const LoginPage = () => {
               });
             }}
           />
-          <button type="submit" className={styles['loginButton']}>
+          <button type='submit' className={styles['loginButton']}>
             Join
           </button>
         </form>
