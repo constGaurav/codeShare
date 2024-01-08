@@ -1,0 +1,15 @@
+.joinedUsers {
+    display: flex;
+    gap: 20px;
+    background-color:  #331832;
+    color: #fff;
+    justify-content: center;
+    padding: 20px;
+    height: 60px;
+}
+
+.codeEditor {
+    height: calc(100vh - 60px);
+    background-color: #1f0f1e;
+    
+}
