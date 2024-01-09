@@ -19,7 +19,6 @@ const LoginPage = () => {
     }
 
     navigate('/code', { state: { username, roomId } });
-    console.log(username, roomId);
   };
 
   return (
