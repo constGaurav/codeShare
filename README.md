@@ -1,3 +1,4 @@
 # codeShare
 
-### I have commented `<React.StrictMode>` in client/main.tsx, because I'm using react > 18. So, the useEffect was running two times. I will resolve this issue Later
+### TODOs
+1. There is one issue with the code sync for new user, whenever a new user joins we have to update the existing code for that user.
