@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './styles.module.css';
 import { v4 as uuidv4 } from 'uuid';
+import styles from './styles.module.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();

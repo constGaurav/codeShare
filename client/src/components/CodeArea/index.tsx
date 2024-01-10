@@ -3,23 +3,9 @@ import toast from 'react-hot-toast';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ESocketActions } from '../../SocketActions';
 import { initSocket } from '../../socket';
+import { JoinedUsers } from '../JoinedUsers';
 import styles from './styles.module.css';
 import { IJoinedUsers, IUser } from './types';
-
-const JoinedUsers = ({ users }: { users: IUser[] }) => {
-  return (
-    <div className={styles['joinedUsers']}>
-      <div style={{ fontWeight: 'bold' }}>Live Users: {users.length} </div>
-      {users.map((user) => {
-        return (
-          <div key={user.socketId} className={styles['userList']}>
-            {user.username}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
 
 const CodeArea = () => {
   const location = useLocation();
@@ -135,7 +121,7 @@ const CodeArea = () => {
   }
 
   return (
-    <div>
+    <>
       <div className={styles['header']}>
         <JoinedUsers users={users} />
         <div className={styles['headerBtns']}>
@@ -163,7 +149,7 @@ const CodeArea = () => {
           }}
         />
       </div>
-    </div>
+    </>
   );
 };
 
