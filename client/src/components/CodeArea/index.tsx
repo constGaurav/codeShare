@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ESocketActions } from '../../SocketActions';
 import { initSocket } from '../../socket';
-import { JoinedUsers } from '../JoinedUsers';
+import { JoinedUsers } from './JoinedUsers';
 import styles from './styles.module.css';
 import { IJoinedUsers, IUser } from './types';
 
