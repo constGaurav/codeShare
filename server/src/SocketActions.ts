@@ -4,5 +4,6 @@ export enum ESocketActions {
   JOINED = 'joined',
   LEAVE = 'leave',
   ON_CODE_CHANGE = 'on code change',
+  CODE_SYNC = 'code sync',
   DISCONNECTED = 'disconnected',
 }

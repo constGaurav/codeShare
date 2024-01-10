@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './styles.module.css';
 import { ESocketActions } from '../../SocketActions';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { initSocket } from '../../socket';
 
 interface IUser {
@@ -35,6 +35,7 @@ const CodeArea = () => {
   const [users, setUsers] = useState<IUser[]>([]);
   const [code, setCode] = useState('');
   const socketRef = useRef<any>(null);
+  const navigator = useNavigate();
 
   useEffect(() => {
     if (!location.state) {
@@ -51,7 +52,16 @@ const CodeArea = () => {
       }
 
       socketRef.current = await initSocket();
-      // TODO: Handle socket errors, connect_error, connect_failed
+
+      socketRef.current.on('connect_error', (error: { message: any }) => {
+        console.error('Connection Error:', error.message);
+        navigator('/');
+      });
+
+      socketRef.current.on('connect_failed', (error: { message: any }) => {
+        console.error('Connection Failed:', error.message);
+        navigator('/');
+      });
 
       // When a you join
       socketRef.current.emit(ESocketActions.JOIN, {
@@ -62,14 +72,27 @@ const CodeArea = () => {
       // When Other users join
       socketRef.current.on(
         ESocketActions.JOINED,
-        ({ username, users }: IJoinedUsers) => {
+        ({ username, users, socketId }: IJoinedUsers) => {
           // Notify other users that one new user has joined
           if (location.state?.username !== username) {
             console.log(`User ${username} has joined`);
           }
           setUsers(users);
+
+          // Emit for Syncing code for new users
+          socketRef.current.emit(ESocketActions.CODE_SYNC, {
+            socketId,
+            code,
+          });
         }
       );
+
+      // Handle on change of code
+      socketRef.current.on(ESocketActions.ON_CODE_CHANGE, ({ code }: any) => {
+        if (code !== null) {
+          setCode(code);
+        }
+      });
 
       // On Disconnection
       socketRef.current.on(
@@ -85,15 +108,22 @@ const CodeArea = () => {
     };
 
     init();
+
+    return () => {
+      socketRef.current.disconnect();
+      socketRef.current.off(ESocketActions.JOINED).disconnect();
+      socketRef.current.off(ESocketActions.ON_CODE_CHANGE).disconnect();
+      socketRef.current.off(ESocketActions.DISCONNECTED).disconnect();
+    };
   }, []);
 
   const handleCodeOnChange = (e: any) => {
     setCode(e.target.value);
-    // socketRef.current.emit(ESocketActions.ON_CODE_CHANGE, {
-    //   roomId: location.state.roomId,
-    //   username: location.state.username,
-    //   code: e.target.value,
-    // });
+    socketRef.current.emit(ESocketActions.ON_CODE_CHANGE, {
+      roomId: location.state.roomId,
+      username: location.state.username,
+      code: e.target.value,
+    });
   };
 
   if (!location.state) {

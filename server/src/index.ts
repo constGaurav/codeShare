@@ -39,7 +39,6 @@ io.on('connection', (socket: Socket) => {
 
     // emit joined
     const users = getAllConnectedUsers(roomId);
-    console.log({ users });
     users.forEach(({ socketId }) => {
       io.to(socketId).emit(ESocketActions.JOINED, {
         users,
@@ -49,9 +48,17 @@ io.on('connection', (socket: Socket) => {
     });
   });
 
-  // socket.on(ESocketActions.ON_CODE_CHANGE, (data) => {
-  //   io.emit(ESocketActions.ON_CODE_CHANGE, data);
-  // });
+  // On Code Change
+  socket.on(ESocketActions.ON_CODE_CHANGE, ({ roomId, code }: any) => {
+    socket.in(roomId).emit(ESocketActions.ON_CODE_CHANGE, {
+      code,
+    });
+  });
+
+  // handle code sync for new users
+  socket.on(ESocketActions.CODE_SYNC, ({ socketId, code }: any) => {
+    io.to(socketId).emit(ESocketActions.ON_CODE_CHANGE, { code });
+  });
 
   // On Disconnect
   socket.on('disconnecting', () => {
