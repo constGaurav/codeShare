@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.css';
+import { v4 as uuidv4 } from 'uuid';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -8,6 +9,12 @@ const LoginPage = () => {
     username: '',
     roomID: '',
   });
+
+  const handleNewRoom = (e: any) => {
+    e.preventDefault();
+    const roomId = uuidv4();
+    setLoginDetails({ ...loginDetails, roomID: roomId });
+  };
 
   const handleJoinRoom = (e: any) => {
     e.preventDefault();
@@ -33,6 +40,7 @@ const LoginPage = () => {
             onChange={(e) =>
               setLoginDetails({ ...loginDetails, username: e.target.value })
             }
+            required
           />
           <input
             type='password'
@@ -44,10 +52,15 @@ const LoginPage = () => {
                 roomID: e.target.value.trim(),
               });
             }}
+            required
           />
           <button type='submit' className={styles['loginButton']}>
             Join
           </button>
+
+          <div className={styles['newRoom']}>
+            New Room? <button onClick={handleNewRoom}>Create Room</button>
+          </div>
         </form>
       </div>
     </>

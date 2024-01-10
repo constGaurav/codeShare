@@ -6,7 +6,12 @@
     padding: 20px;
 }
 
-.leaveBtn {
+.headerBtns {
+    display: flex;
+    gap: 20px;
+}
+
+.copyRoomIdBtn, .leaveBtn  {
     background: none;
     font-size: 15px;
     color: red;
@@ -14,6 +19,26 @@
     border-radius: 5px;
     border: 2px solid red;
     cursor: pointer;
+
+    &:hover {
+        background-color: red;
+        color: #fff;
+    }
+}
+
+.copyRoomIdBtn {
+    color: green;
+    border: 2px solid green;
+
+    &:hover {
+        background-color: green;
+        color: #fff;
+    }
+}
+
+.leaveBtn {
+    color: red;
+    border: 2px solid red;
 
     &:hover {
         background-color: red;

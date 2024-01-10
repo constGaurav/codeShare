@@ -1,20 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from './styles.module.css';
-import { ESocketActions } from '../../SocketActions';
-import { useLocation, Navigate, useNavigate } from 'react-router-dom';
-import { initSocket } from '../../socket';
 import toast from 'react-hot-toast';
-
-interface IUser {
-  username: string;
-  socketId: string;
-}
-
-interface IJoinedUsers {
-  users: IUser[];
-  username: string;
-  socketId: string;
-}
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { ESocketActions } from '../../SocketActions';
+import { initSocket } from '../../socket';
+import styles from './styles.module.css';
+import { IJoinedUsers, IUser } from './types';
 
 const JoinedUsers = ({ users }: { users: IUser[] }) => {
   return (
@@ -36,7 +26,7 @@ const CodeArea = () => {
   const [users, setUsers] = useState<IUser[]>([]);
   const [code, setCode] = useState('');
   const socketRef = useRef<any>(null);
-  const navigator = useNavigate();
+  const reactNavigate = useNavigate();
 
   useEffect(() => {
     if (!location.state) {
@@ -57,13 +47,13 @@ const CodeArea = () => {
       socketRef.current.on('connect_error', (error: { message: any }) => {
         console.log('Gaurav bhai, Connection Error hai:', error.message);
         toast.error('Connection Error, Please try again!');
-        navigator('/');
+        reactNavigate('/');
       });
 
       socketRef.current.on('connect_failed', (error: { message: any }) => {
         console.log('Gaurav bhai, Connection Failed:', error.message);
         toast.error('Connection Failed, Please try again!');
-        navigator('/');
+        reactNavigate('/');
       });
 
       // When a you join
@@ -131,6 +121,15 @@ const CodeArea = () => {
     });
   };
 
+  const handleRoomIDCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(location.state.roomId);
+      toast.success('Copied RoomID');
+    } catch (error) {
+      toast.error('Could not copy RoomID');
+    }
+  };
+
   if (!location.state) {
     return <Navigate to={'/'} />;
   }
@@ -139,9 +138,20 @@ const CodeArea = () => {
     <div>
       <div className={styles['header']}>
         <JoinedUsers users={users} />
-        <button className={styles['leaveBtn']} onClick={() => navigator('/')}>
-          Leave
-        </button>
+        <div className={styles['headerBtns']}>
+          <button
+            className={styles['copyRoomIdBtn']}
+            onClick={handleRoomIDCopy}
+          >
+            Copy Room ID
+          </button>
+          <button
+            className={styles['leaveBtn']}
+            onClick={() => reactNavigate('/')}
+          >
+            Leave
+          </button>
+        </div>
       </div>
       <div className={styles['codeEditor']}>
         <textarea
