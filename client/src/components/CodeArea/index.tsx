@@ -3,6 +3,7 @@ import styles from './styles.module.css';
 import { ESocketActions } from '../../SocketActions';
 import { useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { initSocket } from '../../socket';
+import toast from 'react-hot-toast';
 
 interface IUser {
   username: string;
@@ -54,12 +55,14 @@ const CodeArea = () => {
       socketRef.current = await initSocket();
 
       socketRef.current.on('connect_error', (error: { message: any }) => {
-        console.error('Connection Error:', error.message);
+        console.log('Gaurav bhai, Connection Error hai:', error.message);
+        toast.error('Connection Error, Please try again!');
         navigator('/');
       });
 
       socketRef.current.on('connect_failed', (error: { message: any }) => {
-        console.error('Connection Failed:', error.message);
+        console.log('Gaurav bhai, Connection Failed:', error.message);
+        toast.error('Connection Failed, Please try again!');
         navigator('/');
       });
 
@@ -76,6 +79,7 @@ const CodeArea = () => {
           // Notify other users that one new user has joined
           if (location.state?.username !== username) {
             console.log(`User ${username} has joined`);
+            toast.success(`${username} has joined the room`);
           }
           setUsers(users);
 
@@ -100,6 +104,7 @@ const CodeArea = () => {
         ({ username, socketId }: any) => {
           // Notify other users that one user has left
           console.log(`User ${username} has left`);
+          toast.error(`${username} has left the room`);
           setUsers((users) => {
             return users.filter((user) => user.socketId !== socketId);
           });
@@ -132,12 +137,20 @@ const CodeArea = () => {
 
   return (
     <div>
-      <JoinedUsers users={users} />
+      <div className={styles['header']}>
+        <JoinedUsers users={users} />
+        <button className={styles['leaveBtn']} onClick={() => navigator('/')}>
+          Leave
+        </button>
+      </div>
       <div className={styles['codeEditor']}>
         <textarea
           className={styles['codeArea']}
           value={code}
           onChange={handleCodeOnChange}
+          onContextMenu={(e) => {
+            e.preventDefault();
+          }}
         />
       </div>
     </div>
