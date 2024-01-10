@@ -10,9 +10,12 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// app.get('/', (req: Request, res: Response) => {
-//   res.sendFile(__dirname + '/index.html');
-// });
+app.get('/', (req: Request, res: Response) => {
+  res.json({
+    message: 'Code share application',
+    author: 'Gaurav Chaudhary',
+  });
+});
 
 // User Socket Mapping
 const userSocketMap: Record<string, string> = {};
@@ -29,8 +32,7 @@ const getAllConnectedUsers = (roomId: string) => {
 };
 
 io.on('connection', (socket: Socket) => {
-  console.log('a user connected', socket.id);
-  // On Join
+  // 1. On Join
   socket.on(ESocketActions.JOIN, ({ roomId, username }: any) => {
     userSocketMap[socket.id] = username;
 
@@ -48,19 +50,19 @@ io.on('connection', (socket: Socket) => {
     });
   });
 
-  // On Code Change
+  // 2. On Code Change
   socket.on(ESocketActions.ON_CODE_CHANGE, ({ roomId, code }: any) => {
     socket.in(roomId).emit(ESocketActions.ON_CODE_CHANGE, {
       code,
     });
   });
 
-  // handle code sync for new users
+  // 3. handle code sync for new users
   socket.on(ESocketActions.CODE_SYNC, ({ socketId, code }: any) => {
     io.to(socketId).emit(ESocketActions.ON_CODE_CHANGE, { code });
   });
 
-  // On Disconnect
+  // 4. On Disconnect
   socket.on('disconnecting', () => {
     const rooms = [...socket.rooms];
     rooms.forEach((roomId) => {
