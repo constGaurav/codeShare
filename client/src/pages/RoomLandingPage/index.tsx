@@ -25,7 +25,7 @@ const RoomLandingPage = () => {
       return;
     }
 
-    navigate('/code', { state: { username, roomId } });
+    navigate('/room', { state: { username, roomId } });
   };
 
   return (
