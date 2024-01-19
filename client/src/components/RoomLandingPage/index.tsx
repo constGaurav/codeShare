@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './styles.module.css';
 
-const LoginPage = () => {
+const RoomLandingPage = () => {
   const navigate = useNavigate();
-  const [loginDetails, setLoginDetails] = useState({
+  const [userDetails, setUserDetails] = useState({
     username: '',
     roomID: '',
   });
@@ -13,13 +13,13 @@ const LoginPage = () => {
   const handleNewRoom = (e: any) => {
     e.preventDefault();
     const roomId = uuidv4();
-    setLoginDetails({ ...loginDetails, roomID: roomId });
+    setUserDetails({ ...userDetails, roomID: roomId });
   };
 
   const handleJoinRoom = (e: any) => {
     e.preventDefault();
-    const username = loginDetails.username.trim();
-    const roomId = loginDetails.roomID.trim();
+    const username = userDetails.username.trim();
+    const roomId = userDetails.roomID.trim();
 
     if (!username || !roomId) {
       return;
@@ -31,30 +31,30 @@ const LoginPage = () => {
   return (
     <>
       <div className={styles['container']}>
-        <form onSubmit={handleJoinRoom} className={styles['loginForm']}>
-          <h1 className={styles['loginHeading']}>Join Room</h1>
+        <form onSubmit={handleJoinRoom} className={styles['joiningRoomForm']}>
+          <h1 className={styles['joinRoomHeading']}>Join Room</h1>
           <input
             type='text'
             placeholder='Username'
-            value={loginDetails.username}
+            value={userDetails.username}
             onChange={(e) =>
-              setLoginDetails({ ...loginDetails, username: e.target.value })
+              setUserDetails({ ...userDetails, username: e.target.value })
             }
             required
           />
           <input
             type='password'
             placeholder='Room ID'
-            value={loginDetails.roomID}
+            value={userDetails.roomID}
             onChange={(e) => {
-              setLoginDetails({
-                ...loginDetails,
+              setUserDetails({
+                ...userDetails,
                 roomID: e.target.value.trim(),
               });
             }}
             required
           />
-          <button type='submit' className={styles['loginButton']}>
+          <button type='submit' className={styles['joiningRoomButton']}>
             Join
           </button>
 
@@ -67,4 +67,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RoomLandingPage;

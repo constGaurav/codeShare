@@ -7,7 +7,7 @@
     justify-content: center;
 }
 
-.loginForm {
+.joiningRoomForm {
     background-color: #1f0f1e;
     width: 500px;
     height: 300px;
@@ -19,7 +19,7 @@
     border-radius: 12px;
 }
 
-.loginHeading { 
+.joinRoomHeading { 
     color: #fff;
     margin-bottom: 30px;
 }
@@ -34,7 +34,7 @@ input {
     color: #fff;
 }
 
-.loginButton {
+.joiningRoomButton {
     width: 200px;
     height: 30px;
     background-color: #e0e0e2;

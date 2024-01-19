@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
+import RoomLandingPage from './components/RoomLandingPage';
 import CodeArea from './components/CodeArea';
 import { Toaster } from 'react-hot-toast';
 
@@ -8,7 +8,7 @@ function App() {
     <>
       <Toaster position='top-center' />
       <Routes>
-        <Route path='/' element={<LoginPage />} />
+        <Route path='/' element={<RoomLandingPage />} />
         <Route path='/code' element={<CodeArea />} />
       </Routes>
     </>
